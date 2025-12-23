@@ -1,6 +1,8 @@
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(const MainApp());
@@ -26,63 +28,16 @@ class DateApp extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<DateApp> {
-  List monthsList = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  List dayList = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ];
-  String yearNow = "";
-  String dayweek = "";
-  String monthNow = "";
-  String dayNum = "";
-  late int hour24;
-  String minutes = "";
-  String seconds = "";
-  int hour12 = 12;
-  String period = "";
+  String weekDay = "";
+  String dateToday = "";
+  String timeNow = "";
 
-  changeDateEverySecond() {
+void  _changeDateEverySecond() {
     Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
-        yearNow = DateTime.now().year.toString();
-        dayNum = DateTime.now().day.toString();
-        dayweek = dayList[(DateTime.now().weekday) - 1];
-        monthNow = monthsList[DateTime.now().month - 1];
-        hour24 = DateTime.now().hour;
-        if (hour24 == 0) {
-          hour12 = 12;
-          period = "AM";
-        } else if (hour24 == 12) {
-          hour12 = 12;
-          period = "PM";
-        } else if (hour24 > 12) {
-          hour12 = hour24 - 12;
-          period = "PM";
-        } else {
-          hour12 = hour24;
-          period = "AM";
-        }
-
-        minutes = DateTime.now().minute.toString();
-        seconds = DateTime.now().second.toString();
+        weekDay=DateFormat.EEEE().format(DateTime.now());
+        dateToday = DateFormat('MMMM d, y').format(DateTime.now()); 
+        timeNow  = DateFormat('hh:mm:ss a').format(DateTime.now()); 
       });
     });
   }
@@ -90,7 +45,7 @@ class _MyWidgetState extends State<DateApp> {
   @override
   void initState() {
     super.initState();
-    changeDateEverySecond();
+    _changeDateEverySecond();
   }
 
   @override
@@ -108,18 +63,18 @@ class _MyWidgetState extends State<DateApp> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "Today is $dayweek  ",
+              "Today is $weekDay  ",
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
             Text(
-              "$monthNow $dayNum, $yearNow",
+              "$dateToday",
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
 
             Text(
-              "${hour12.toString().padLeft(2, "0")} : ${minutes.padLeft(2, "0")} : ${seconds.padLeft(2, "0")} ",
+              "$timeNow",
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
           ],
